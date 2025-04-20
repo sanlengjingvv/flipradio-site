@@ -10,8 +10,14 @@ default: &default
   timeout: 5000
 
 development:
-  <<: *default
-  database: storage/development.sqlite3
+  primary:
+    <<: *default
+    adapter: postgresql
+    database: flipradio_development
+    host: 172.16.18.128
+    username: dbuser_dba
+    password: DBUser.DBA
+
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
