@@ -1,0 +1,13 @@
+<div id="<%= dom_id item %>">
+  <H2 class="text-3xl font-bold mb-4">
+    <a href="<%= item.link %>" class="hover:underline" target="_blank">
+      <%= item.title %>
+    </a>
+  </H2>
+  
+  <article class="prose lg:prose-xl max-w-none mb-8">
+    <%= truncate(item.content, length: 100) %>
+    <%= link_to "Read more", item, class: "mt-3 inline-block hover:text-blue-800" %>
+  </article>
+
+</div>
