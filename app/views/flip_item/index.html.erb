@@ -1,7 +1,8 @@
-<h1>FlipItems</h1>
-
-<% @flip_items.each do |flip_item| %>
-    <h2><%= link_to flip_item.title, flip_item.link, target: "_blank" %></h2>
-    <%= link_to flip_item.content, flip_item %>
-<% end %>
-
+<div id="items">
+    <% @flip_items.each do |flip_item| %>
+        <h2 class="text-3xl font-bold mb-4"><%= link_to flip_item.title, flip_item.link, target: "_blank" %></h2>
+        <p class="mb-8">
+            <%= link_to flip_item.content, flip_item %>
+        </p>
+    <% end %>
+</div>
