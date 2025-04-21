@@ -1,7 +1,7 @@
 <h1>FlipItems</h1>
 
 <% @flip_items.each do |flip_item| %>
-    <h2><%= flip_item.title %></h2>
-    <%= flip_item.content %>
+    <h2><%= link_to flip_item.title, flip_item.link, target: "_blank" %></h2>
+    <%= link_to flip_item.content, flip_item %>
 <% end %>
 

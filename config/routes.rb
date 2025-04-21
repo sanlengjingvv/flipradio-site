@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  get "flip_items/:id", to: "flip_item#show", as: :flip_item
+
   # Defines the root path route ("/")
   root "flip_item#index"
 end
