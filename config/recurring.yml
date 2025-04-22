@@ -8,3 +8,10 @@
 #     command: "SoftDeletedRecord.due.delete_all"
 #     priority: 2
 #     schedule: at 5am every day
+
+development:
+  periodic_command:
+    class: CrawlerJob
+    args: []
+    priority: 0
+    schedule: every hour

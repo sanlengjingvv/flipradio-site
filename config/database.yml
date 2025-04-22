@@ -17,7 +17,10 @@ development:
     host: 172.16.18.128
     username: dbuser_dba
     password: DBUser.DBA
-
+  queue:
+    <<: *default
+    database: storage/development_queue.sqlite3
+    migrations_paths: db/queue_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
