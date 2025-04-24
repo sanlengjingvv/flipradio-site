@@ -65,3 +65,5 @@ end
 gem "pg", "~> 1.5"
 
 gem "tailwindcss-rails", "~> 4.2"
+
+gem "pagy", "~> 9.3"

@@ -2,7 +2,9 @@
     <% @flip_items.each do |flip_item| %>
         <h2 class="text-3xl font-bold mb-4"><%= link_to flip_item.title, flip_item.link, target: "_blank" %></h2>
         <p class="mb-8">
-            <%= link_to flip_item.content, flip_item %>
+            <%= link_to truncate(flip_item.content, length: 100), flip_item %>
         </p>
     <% end %>
 </div>
+
+<%== pagy_nav(@pagy) %>
