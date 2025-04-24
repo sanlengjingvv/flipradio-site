@@ -4,4 +4,8 @@ class FlipItem < ApplicationRecord
   validates :content, presence: true
 
   scope :recent, -> { order(created_at: :desc) }
+
+  def self.search(query)
+    where("title like ? OR content like ?", "%#{query}%", "%#{query}%")
+  end
 end
