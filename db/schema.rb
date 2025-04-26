@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_20_131850) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_26_130258) do
   create_schema "monitor"
   create_schema "repack"
 
@@ -38,5 +38,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_20_131850) do
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "release_date"
+    t.index ["link"], name: "index_flip_items_on_link", unique: true
   end
 end
