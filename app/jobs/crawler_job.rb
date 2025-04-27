@@ -7,6 +7,7 @@ class CrawlerJob < ApplicationJob
   def perform(*args)
     crawler_newsletter
     crawler_spotify
+    crawler_youtube
   end
 
   def crawler_newsletter
@@ -70,6 +71,38 @@ class CrawlerJob < ApplicationJob
           Rails.logger.error "Spotify transcript crawl failed: #{e.message}"
         end
         FlipItem.create(title: episode["name"], link: episode["external_urls"]["spotify"], content: transcript_text, release_date: episode["release_date"])
+      end
+    end
+  end
+
+  def crawler_youtube
+    Rails.logger.debug "Youtube CrawlerJob Started"
+    last_youtube = FlipItem.where("link LIKE ?", "https://www.youtube.com/%").order(release_date: :desc, created_at: :desc).limit(1).first
+    dateafter = last_youtube ? last_youtube.release_date.to_s.gsub("-", "") : "20231110"
+    youtube_dl_path = Rails.root.join("exec", "youtube-dl").to_s
+    command = "#{youtube_dl_path} --playlist-reverse --dateafter #{dateafter} --dump-json https://www.youtube.com/@flipradio_fearnation/videos"
+    IO.popen(command) do |io|
+      while line = io.gets
+        info = JSON.parse(line.chomp)
+        webpage_url = info["webpage_url"]
+        title = info["title"]
+        Rails.logger.debug "Youtube-dl: #{title} #{webpage_url}"
+        next if [ "PLxfcznuBUN2Dr6EqSxDSlrt7DjpznRbZk", "PLxfcznuBUN2AaOeUu1q03ccPf6XSJx8Ee", "PLxfcznuBUN2AC9eTTB3dbhEjMIih-UcAQ" ].include?(info["playlist_id"])
+        upload_date = info["upload_date"]
+        subtitle = ""
+        if info["subtitles"] && info["subtitles"]["zh"]
+          info["subtitles"]["zh"].each do |subtitle_zh|
+            if subtitle_zh["ext"] == "vtt"
+              subtitle_response = RestClient.send("get", subtitle_zh["url"])
+              subtitle = subtitle_response.body
+              subtitle.gsub!(/WEBVTT\nKind: captions\nLanguage: zh/, "")
+              subtitle.gsub!(/^\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}/, "")
+              subtitle = subtitle.split("\n").reject(&:empty?).join("\n")
+            end
+          end
+        end
+        FlipItem.upsert({ title: title, link: webpage_url, content: subtitle, release_date: upload_date }, unique_by: :link)
+        Rails.logger.info "Youtube: #{title} #{webpage_url} saved"
       end
     end
   end
