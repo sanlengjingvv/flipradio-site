@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_26_130258) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_27_022934) do
   create_schema "monitor"
   create_schema "repack"
 
@@ -35,7 +35,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_26_130258) do
   create_table "flip_items", force: :cascade do |t|
     t.string "title"
     t.string "link"
-    t.text "content"
+    t.text "content", default: ""
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "release_date"

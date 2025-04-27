@@ -49,6 +49,7 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+  gem "dotenv"
 end
 
 group :development do
@@ -67,3 +68,5 @@ gem "pg", "~> 1.5"
 gem "tailwindcss-rails", "~> 4.2"
 
 gem "pagy", "~> 9.3"
+
+gem "rest-client", "~> 2.1"
