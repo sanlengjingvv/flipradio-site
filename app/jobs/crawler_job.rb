@@ -5,9 +5,10 @@ class CrawlerJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
-    crawler_newsletter
-    crawler_spotify
-    crawler_youtube
+    crawler_article
+    # crawler_newsletter
+    # crawler_spotify
+    # crawler_youtube
   end
 
   def crawler_newsletter
@@ -104,6 +105,23 @@ class CrawlerJob < ApplicationJob
         FlipItem.upsert({ title: title, link: webpage_url, content: subtitle, release_date: upload_date }, unique_by: :link)
         Rails.logger.info "Youtube: #{title} #{webpage_url} saved"
       end
+    end
+  end
+
+  def crawler_article
+    Rails.logger.debug "CrawlerJob Started crawler_article"
+    catalog = Nokogiri::HTML(URI.open("https://www.flipradio.club/-3"))
+    catalog.css(".title-wrapper").each do |title_wrapper|
+      title = title_wrapper.css("h3").text.strip
+      link = title_wrapper.css("a").attr("href").value
+      next if FlipItem.where(link: link).exists?
+      Rails.logger.debug "Article: #{title} #{link}"
+      article = Nokogiri::HTML(URI.open(link))
+      published_date = article.css(".published-date span:nth-child(2)").text
+      content = article.xpath("//*[contains(@class, 'pub-body-component')]//text()").map(&:text).join("\n").strip
+      Rails.logger.debug "Articl published_date and content: #{published_date} #{content}"
+      FlipItem.create(title: title, link: link, content: content, release_date: published_date)
+      Rails.logger.info "Article: #{title} saved"
     end
   end
 end
