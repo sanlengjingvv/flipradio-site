@@ -1,5 +1,6 @@
 class FlipItemsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [ :update ]
+  skip_before_action :require_authentication, except: [ :update ]
 
   def index
     @pagy, @flip_items = pagy(params[:query].present? ? FlipItem.recent.search(params[:query]) : FlipItem.recent.all)
