@@ -1,0 +1,27 @@
+<%= form_with(model: flip_item) do |form| %>
+  <% if flip_item.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(flip_item.errors.count, "error") %> prohibited this flip_item from being saved:</h2>
+
+      <ul>
+        <% flip_item.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :content, style: "display: block" %>
+    <%= form.text_field :content %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
