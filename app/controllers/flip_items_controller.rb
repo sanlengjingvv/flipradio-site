@@ -1,4 +1,4 @@
-class FlipItemController < ApplicationController
+class FlipItemsController < ApplicationController
   def index
     @pagy, @flip_items = pagy(params[:query].present? ? FlipItem.recent.search(params[:query]) : FlipItem.recent.all)
   end

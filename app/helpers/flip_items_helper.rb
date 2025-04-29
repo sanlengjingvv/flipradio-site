@@ -1,0 +1,2 @@
+module FlipItemsHelper
+end
