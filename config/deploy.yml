@@ -7,7 +7,7 @@ image: banno/flipradio_site
 # Deploy to these servers.
 servers:
   web:
-    - 146.190.175.64
+    - 64.23.149.27
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -19,7 +19,7 @@ servers:
 # Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 proxy:
   ssl: true
-  host: 146.190.175.64
+  host: 64.23.149.27
 
 # Credentials for your image host.
 registry:
