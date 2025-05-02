@@ -35,7 +35,11 @@ test:
 production:
   primary:
     <<: *default
-    database: storage/production.sqlite3
+    adapter: postgresql
+    database: flipradio_production
+    host: <%= ENV.fetch("RAILS_DATABASE_HOST") %>
+    username: <%= ENV.fetch("RAILS_DATABASE_USERNAME") %>
+    password: <%= ENV.fetch("RAILS_DATABASE_PASSWORD") %>
   cache:
     <<: *default
     database: storage/production_cache.sqlite3
