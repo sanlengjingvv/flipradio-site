@@ -6,9 +6,9 @@ class CrawlerJob < ApplicationJob
 
   def perform(*args)
     crawler_article
-    # crawler_newsletter
-    # crawler_spotify
-    # crawler_youtube
+    crawler_newsletter
+    crawler_spotify
+    crawler_youtube
   end
 
   def crawler_newsletter
