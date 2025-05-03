@@ -12,7 +12,7 @@ class CrawlerJob < ApplicationJob
   end
 
   def crawler_newsletter
-    Rails.logger.debug "CrawlerJob Started crawler_newsletter"
+    Rails.logger.info "CrawlerJob Started crawler_newsletter"
     host = "https://fearnation.club"
     flip_item = FlipItem.where("link LIKE ?", "https://fearnation.club/%").order(created_at: :desc).limit(1).first
     last_post = flip_item&.link
@@ -32,7 +32,7 @@ class CrawlerJob < ApplicationJob
   end
 
   def crawler_spotify
-    Rails.logger.debug "Spotify CrawlerJob Started"
+    Rails.logger.info "Spotify CrawlerJob Started"
     api_uri = "https://api.spotify.com/v1"
     token_uri = "https://accounts.spotify.com/api/token"
     client_id = ENV["CLIENT_ID"]
@@ -46,7 +46,7 @@ class CrawlerJob < ApplicationJob
     show_id = "6O2YwvuGpP2y17SpC8MM5s"
     episodes = { "next" => "#{api_uri}/shows/#{show_id}/episodes?limit=50&offset=0" }
     while episodes["next"] != nil
-      Rails.logger.debug "Next page of Spotify episodes is #{episodes["next"]}"
+      Rails.logger.info "Next page of Spotify episodes is #{episodes["next"]}"
       episodes_response = RestClient.send "get", episodes["next"], { Authorization: "Bearer #{client_token}" }
       episodes = JSON.parse(episodes_response.body)
 
@@ -54,7 +54,7 @@ class CrawlerJob < ApplicationJob
       episodes["items"].each do |episode|
         return if flip_item && flip_item.link == episode["external_urls"]["spotify"]
         next if [ "1/2", "2/2", "1/3", "2/3", "3/3", "1/4", "2/4", "3/4", "4/4", "1/5", "2/5", "3/5", "4/5", "5/5", "YT直播", "透明茶室" ].any? { |substring| episode["name"].include?(substring) }
-        Rails.logger.debug "Spotify episode name is #{episode["name"]}, external_urls is #{episode["external_urls"]["spotify"]}"
+        Rails.logger.info "Spotify episode name is #{episode["name"]}, external_urls is #{episode["external_urls"]["spotify"]}"
         transcript_text = ""
         begin
           transcript_response = RestClient.send("get", "https://spclient.wg.spotify.com/transcript-read-along/v2/episode/#{episode["id"]}?format=json", { "Authorization" => "Bearer #{ENV['SPOTIFY_WEB_TOKEN']}" })
@@ -77,7 +77,7 @@ class CrawlerJob < ApplicationJob
   end
 
   def crawler_youtube
-    Rails.logger.debug "Youtube CrawlerJob Started"
+    Rails.logger.info "Youtube CrawlerJob Started"
     last_youtube = FlipItem.where("link LIKE ?", "https://www.youtube.com/%").order(release_date: :desc, created_at: :desc).limit(1).first
     dateafter = last_youtube ? last_youtube.release_date.to_s.gsub("-", "") : "20231110"
     youtube_dl_path = Rails.root.join("exec", "youtube-dl").to_s
@@ -87,7 +87,7 @@ class CrawlerJob < ApplicationJob
         info = JSON.parse(line.chomp)
         webpage_url = info["webpage_url"]
         title = info["title"]
-        Rails.logger.debug "Youtube-dl: #{title} #{webpage_url}"
+        Rails.logger.info "Youtube-dl: #{title} #{webpage_url}"
         next if [ "PLxfcznuBUN2Dr6EqSxDSlrt7DjpznRbZk", "PLxfcznuBUN2AaOeUu1q03ccPf6XSJx8Ee", "PLxfcznuBUN2AC9eTTB3dbhEjMIih-UcAQ" ].include?(info["playlist_id"])
         upload_date = info["upload_date"]
         subtitle = ""
@@ -109,13 +109,13 @@ class CrawlerJob < ApplicationJob
   end
 
   def crawler_article
-    Rails.logger.debug "CrawlerJob Started crawler_article"
+    Rails.logger.info "CrawlerJob Started crawler_article"
     catalog = Nokogiri::HTML(URI.open("https://www.flipradio.club/-3"))
     catalog.css(".title-wrapper").each do |title_wrapper|
       title = title_wrapper.css("h3").text.strip
       link = title_wrapper.css("a").attr("href").value
       next if FlipItem.where(link: link).exists?
-      Rails.logger.debug "Article: #{title} #{link}"
+      Rails.logger.info "Article: #{title} #{link}"
       article = Nokogiri::HTML(URI.open(link))
       published_date = article.css(".published-date span:nth-child(2)").text
       content = article.xpath("//*[contains(@class, 'pub-body-component')]//text()").map(&:text).join("\n").strip
