@@ -1,6 +1,6 @@
 class FlipItemsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [ :update ]
-  skip_before_action :require_authentication, except: [ :update ]
+  skip_before_action :verify_authenticity_token, only: [ :update, :create ]
+  skip_before_action :require_authentication, except: [ :update, :create ]
 
   def index
     @pagy, @flip_items = pagy(params[:query].present? ? FlipItem.recent.search(params[:query]) : FlipItem.recent.all)
@@ -27,9 +27,18 @@ class FlipItemsController < ApplicationController
     end
   end
 
+  def create
+    @flip_item = FlipItem.new(flip_item_params)
+    if @flip_item.save
+      render :show, status: :ok, location: @flip_item
+    else
+      render json: @flip_item.errors, status: :unprocessable_entity
+    end
+  end
+
   private
     # Only allow a list of trusted parameters through.
     def flip_item_params
-      params.expect(flip_item: [ :title, :content ])
+      params.expect(flip_item: [ :title, :link, :content, :release_date ])
     end
 end

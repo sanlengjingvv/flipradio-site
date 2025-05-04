@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get "flip_items", to: "flip_items#index", as: :flip_items
   get "flip_items/:id/edit", to: "flip_items#edit", as: :edit_flip_item
   patch "flip_items/:id", to: "flip_items#update"
+  post "flip_items", to: "flip_items#create"
   # resources :flip_items
   # Defines the root path route ("/")
   root "flip_items#index"
