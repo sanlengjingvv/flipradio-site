@@ -1,3 +1,2 @@
-<h1 class="text-3xl font-bold mb-4"><%= @flip_item.title %></h1>
-<%= @flip_item.content %>
-
+<h1 class="text-3xl font-bold mb-4"><%= link_to @flip_item.title, @flip_item.link, target: "_blank" %></h1>
+<%= simple_format @flip_item.content %>
