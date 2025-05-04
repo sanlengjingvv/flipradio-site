@@ -39,3 +39,5 @@
 # Ignore exec file, but keep the directory.
 /exec/*
 !/exec/.keep
+
+.DS_Store

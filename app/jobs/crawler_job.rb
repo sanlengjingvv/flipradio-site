@@ -7,8 +7,8 @@ class CrawlerJob < ApplicationJob
   def perform(*args)
     crawler_article
     crawler_newsletter
-    crawler_spotify
     crawler_youtube
+    crawler_anchor
   end
 
   def crawler_newsletter
@@ -91,6 +91,7 @@ class CrawlerJob < ApplicationJob
         title = info["title"]
         Rails.logger.info "Youtube-dl: #{title} #{webpage_url}"
         next if [ "PLxfcznuBUN2Dr6EqSxDSlrt7DjpznRbZk", "PLxfcznuBUN2AaOeUu1q03ccPf6XSJx8Ee", "PLxfcznuBUN2AC9eTTB3dbhEjMIih-UcAQ" ].include?(info["playlist_id"])
+        next if FlipItem.find_by title: title
         upload_date = info["upload_date"]
         subtitle = ""
         if info["subtitles"] && info["subtitles"]["zh"]
@@ -124,6 +125,29 @@ class CrawlerJob < ApplicationJob
       Rails.logger.debug "Articl published_date and content: #{published_date} #{content}"
       FlipItem.create(title: title, link: link, content: content, release_date: published_date)
       Rails.logger.info "Article: #{title} saved"
+    end
+  end
+
+  def crawler_anchor
+    Rails.logger.info "CrawlerJob Started crawler_anchor"
+    rss_url = "https://anchor.fm/s/141e652c/podcast/rss"
+    rss = Nokogiri::XML(URI.open(rss_url))
+    items = rss.xpath("//channel/item")
+    puts items.size
+
+    items.each do |item|
+      title = item.xpath("title").text.strip
+      next if [ "1/2", "2/2", "1/3", "2/3", "3/3", "1/4", "2/4", "3/4", "4/4", "1/5", "2/5", "3/5", "4/5", "5/5", "YT直播", "透明茶室" ].any? { |substring| title.include?(substring) }
+      link = item.xpath("enclosure").attr("url").value
+      release_date = item.xpath("pubDate").text.to_date.strftime("%Y-%m-%d")
+      flip_item = FlipItem.find_by title: title
+      if flip_item
+        Rails.logger.debug "flip_item.link: #{flip_item.link}, link: #{link}, #{flip_item.link != link}"
+        flip_item.update!(link: link) if flip_item.link != link
+      else
+        flip_item = FlipItem.create!(title: title, link: link, release_date: release_date)
+      end
+      Rails.logger.info "Anchor title: #{title} link: #{link} release_date: #{release_date} saved"
     end
   end
 end
