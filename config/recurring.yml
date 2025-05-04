@@ -14,4 +14,4 @@ development:
     class: CrawlerJob
     args: []
     priority: 0
-    schedule: every hour
+    schedule: every day except Saturday and Sunday

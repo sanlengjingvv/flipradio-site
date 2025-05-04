@@ -80,8 +80,10 @@ class CrawlerJob < ApplicationJob
     Rails.logger.info "Youtube CrawlerJob Started"
     last_youtube = FlipItem.where("link LIKE ?", "https://www.youtube.com/%").order(release_date: :desc, created_at: :desc).limit(1).first
     dateafter = last_youtube ? last_youtube.release_date.to_s.gsub("-", "") : "20231110"
-    youtube_dl_path = Rails.root.join("exec", "youtube-dl").to_s
-    command = "#{youtube_dl_path} --playlist-reverse --dateafter #{dateafter} --dump-json https://www.youtube.com/@flipradio_fearnation/videos"
+    yt_dlp_path = Rails.root.join("exec", "yt-dlp").to_s
+    cookies_path = Rails.root.join("exec", "cookies.txt").to_s
+    cookies = File.exist?(cookies_path) ? "--cookies #{cookies_path}": ""
+    command = "#{yt_dlp_path} #{cookies} --dateafter #{dateafter} --dump-json https://www.youtube.com/@flipradio_fearnation/videos"
     IO.popen(command) do |io|
       while line = io.gets
         info = JSON.parse(line.chomp)
