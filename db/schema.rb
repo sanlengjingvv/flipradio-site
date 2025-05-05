@@ -11,8 +11,8 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.0].define(version: 2025_05_05_030422) do
-  create_schema "monitor"
-  create_schema "repack"
+  create_schema "monitor", if_not_exists: true
+  create_schema "repack", if_not_exists: true
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
