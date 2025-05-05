@@ -5,10 +5,7 @@ class CrawlerJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
-    crawler_article
     crawler_newsletter
-    crawler_youtube
-    crawler_podchaser
   end
 
   def crawler_newsletter
@@ -148,55 +145,6 @@ class CrawlerJob < ApplicationJob
         flip_item = FlipItem.create!(title: title, link: link, release_date: release_date)
       end
       Rails.logger.info "Anchor title: #{title} link: #{link} release_date: #{release_date} saved"
-    end
-  end
-
-  def crawler_podchaser
-    Rails.logger.info "CrawlerJob Started crawler_podchaser"
-    url = "https://api.podchaser.com/graphql"
-    headers = { "Content-Type" => "application/json", "Authorization" => "Bearer #{ENV["PODCHASER_TOKEN_PROD"]}" }
-    page = 0
-    hasMorePages = true
-    while hasMorePages
-      page += 1
-      query = <<~QUERY
-      query Podcast {
-          podcast(identifier: { id: "22728", type: PODCHASER }) {
-              title
-              episodes(page: #{page}, sort: { sortBy: AIR_DATE, direction: ASCENDING }, first: 100) {
-                  data {
-                      title
-                      airDate
-                      audioUrl
-                      url
-                  }
-                  paginatorInfo {
-                      count
-                      currentPage
-                      total
-                      hasMorePages
-                  }
-              }
-          }
-      }
-      QUERY
-      request_body = {
-        "query": query,
-        "operationName": "Podcast",
-        "variables": {}
-      }
-      response = RestClient.post(url, request_body, headers)
-      episodes = JSON.parse(response)["data"]["podcast"]["episodes"]
-      episodes["data"].each do |episode|
-        title = episode["title"]
-        next if [ "1/2", "2/2", "1/3", "2/3", "3/3", "1/4", "2/4", "3/4", "4/4", "1/5", "2/5", "3/5", "4/5", "5/5", "YT直播", "透明茶室" ].any? { |substring| title.include?(substring) }
-        link = episode["url"]
-        audiovisual_url = episode["audioUrl"]
-        release_date = episode["airDate"].to_date.strftime("%Y-%m-%d")
-        flip_item = FlipItem.find_by title: title
-        FlipItem.create!(title: title, link: link, audiovisual_url: audiovisual_url, release_date: release_date) if flip_item.nil?
-      end
-      hasMorePages = episodes["paginatorInfo"]["hasMorePages"]
     end
   end
 end

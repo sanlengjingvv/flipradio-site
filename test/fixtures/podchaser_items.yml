@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  air_date: 2025-05-05
+  audio_url: MyString
+  url: MyString
+  episode_id: MyString
+  image_url: MyString
+
+two:
+  title: MyString
+  air_date: 2025-05-05
+  audio_url: MyString
+  url: MyString
+  episode_id: MyString
+  image_url: MyString

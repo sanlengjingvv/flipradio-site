@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_05_030422) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_05_101628) do
   create_schema "monitor", if_not_exists: true
   create_schema "repack", if_not_exists: true
 
@@ -42,6 +42,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_030422) do
     t.string "transcript_source"
     t.string "audiovisual_url"
     t.index ["link"], name: "index_flip_items_on_link", unique: true
+  end
+
+  create_table "podchaser_items", force: :cascade do |t|
+    t.string "title", null: false
+    t.datetime "air_date"
+    t.string "audio_url"
+    t.string "url"
+    t.string "episode_id"
+    t.string "image_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["episode_id"], name: "unique_episode_id", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|

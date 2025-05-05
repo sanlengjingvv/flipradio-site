@@ -1,0 +1,2 @@
+class PodchaserItem < ApplicationRecord
+end
