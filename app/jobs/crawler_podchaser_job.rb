@@ -4,7 +4,7 @@ class CrawlerPodchaserJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
-    Rails.logger.info "CrawlerPodchaserJob Started"
+    Rails.logger.info "CrawlerPodchaserJob started"
     last_episode = PodchaserItem.order(air_date: :desc, created_at: :desc).limit(1).first
     podchaser_api = "https://api.podchaser.com/graphql"
     headers = { "Content-Type" => "application/json", "Authorization" => "Bearer #{ENV["PODCHASER_TOKEN_PROD"]}" }
