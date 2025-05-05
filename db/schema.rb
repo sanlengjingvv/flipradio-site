@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_04_105655) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_05_030422) do
+  create_schema "monitor"
+  create_schema "repack"
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -37,6 +40,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_04_105655) do
     t.datetime "updated_at", null: false
     t.date "release_date"
     t.string "transcript_source"
+    t.string "audiovisual_url"
     t.index ["link"], name: "index_flip_items_on_link", unique: true
   end
 
