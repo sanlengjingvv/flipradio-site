@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_05_132641) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_06_002711) do
   create_schema "monitor"
   create_schema "repack"
 
@@ -63,6 +63,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_132641) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "spotify_items", force: :cascade do |t|
+    t.string "name"
+    t.string "link"
+    t.string "episode_id"
+    t.date "release_date"
+    t.text "transcript"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["link"], name: "index_spotify_items_on_link", unique: true
   end
 
   create_table "users", force: :cascade do |t|

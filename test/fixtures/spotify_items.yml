@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  episode_id: MyString
+  release_date: 2025-05-06
+  transcript: MyText
+
+two:
+  name: MyString
+  episode_id: MyString
+  release_date: 2025-05-06
+  transcript: MyText
