@@ -3,7 +3,11 @@ class FlipItemsController < ApplicationController
   skip_before_action :require_authentication, except: [ :update, :create ]
 
   def index
-    @pagy, @flip_items = pagy(params[:query].present? ? FlipItem.recent.search(params[:query]) : FlipItem.recent.all)
+    if params[:title].present?
+      @flip_items = FlipItem.where(title: params[:title])
+    else
+      @pagy, @flip_items = pagy(params[:query].present? ? FlipItem.recent.search(params[:query]) : FlipItem.recent.all)
+    end
   end
 
   def show
@@ -17,7 +21,7 @@ class FlipItemsController < ApplicationController
   def update
     @flip_item = FlipItem.find(params[:id])
     respond_to do |format|
-      if @flip_item.update(flip_item_params)
+      if @flip_item.update!(flip_item_params)
         format.html { redirect_to @flip_item, notice: "flip_item was successfully updated." }
         format.json { render :show, status: :ok, location: @flip_item }
       else
