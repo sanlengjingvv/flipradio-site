@@ -1,0 +1,85 @@
+class FixTyposJob < ApplicationJob
+  queue_as :default
+
+  def perform(*args)
+    flip_items = FlipItem.where "link LIKE ? OR link LIKE ?", "https://open.spotify.com/%", "https://www.xiaoyuzhoufm.com/%"
+    flip_items.each do |flip_item|
+      title = flip_item.title
+      content = flip_item.content
+      content.gsub!(/我是李宗盛/, "我是李厚辰")
+      content.gsub!(/.*(字幕志愿者|李宗盛|优优独播|独播剧场|YoYo|明镜与|明镜需|支持明镜|订阅 转发).*/, "")
+      content.gsub!(/李厚成|李厚臣|李侯诚|李侯臣|李厚诚|刘成|厉后尘/, "李厚辰")
+      content.gsub!("翻店", "翻电")
+      content.gsub!(/飞软电台|发展电台|菲尔电台/, "翻转电台")
+      content.gsub!("饭店问答", "翻电问答")
+      content.gsub!("饭店节目", "翻电节目")
+      content.gsub!(/饭店2.0|翻顿2.0|饭店二点零|翻译2.0/, "翻电2.0")
+      content.gsub!(/饭店 special|饭店special|finance special/, "翻电special")
+      content.gsub!(/饭店小品/, "翻电小品")
+      content.gsub!("励志FM", "荔枝FM")
+      content.gsub!(/一声中声|一声终声/, "一声钟声")
+      content.gsub!(/兮兮兮兮/, "熙熙攘攘")
+      content.gsub!(/^(.*)(\r?\n\1)+$/, '\1')
+      content.gsub!(/维德根斯坦|威利克斯坦|威德格斯均|威迪根斯坦|维特更斯坦|维根斯坦|维利根斯坦|Wittgenstein|维德格斯坦|威德根斯坦|威尔格斯坦/, "维特根斯坦")
+      content.gsub!(/绒格|荣哥/, "荣格")
+      content.gsub!(/修摩|修末|修魔|休魔/, "休谟")
+      content.gsub!(/鲁梭/, "卢梭")
+      content.gsub!(/迪卡尔/, "笛卡儿")
+      content.gsub!("弗洛义德", "弗洛伊德")
+      content.gsub!(/等决制|等决志/, "等爵制")
+      content.gsub!("加决", "加爵")
+      content.gsub!("加官进决", "加官进爵")
+      content.gsub!("寻子", "荀子")
+      content.gsub!("俊宪制", "郡县制")
+      content.gsub!("配县", "沛县")
+      content.gsub!("四水年华", "似水年华")
+      content.gsub!("四水", "泗水")
+      content.gsub!("秦靖", "秦晋")
+      content.gsub!("周情", "周秦")
+      content.gsub!("萧和", "萧何")
+      content.gsub!(/从世人到蓄力|从事人到蓄力/, "从士人到胥吏")
+      content.gsub!("蓄力制度", "胥吏制度")
+      content.gsub!("从世人到蓄力", "从士人到胥吏")
+      content.gsub!("力的起义", "吏的起义")
+      content.gsub!("励志起义", "吏治起义")
+      content.gsub!("励志的起义", "吏治的起义")
+      if title.include?("孔子")
+        content.gsub!("励志", "吏治")
+      end
+      content.gsub!("罗格斯", "逻各斯")
+      content.gsub!("鲜艳理性", "先验理性")
+      content.gsub!(/鲜艳范畴|鲜艳的范畴/, "先验范畴")
+      content.gsub!("静中月", "镜中月")
+      content.gsub!("唯明论", "唯名论")
+      content.gsub!("陈思", "沉思")
+      content.gsub!("不合十一", "不合时宜")
+      content.gsub!("必判性", "批判性")
+      content.gsub!("什达劳斯", "斯特劳斯")
+      content.gsub!(/书本画|书本华/, "叔本华")
+      content.gsub!("花拉子摩", "花剌子模")
+      content.gsub!("西荣", "西戎")
+      content.gsub!("胡扶其社", "胡服骑射")
+      content.gsub!("赵武凌王", "赵武灵王")
+      content.gsub!("宗观", "综观")
+      content.gsub!("偏实", "偏食")
+      content.gsub!("综数", "综述")
+      content.gsub!("无套酷汉", "无套裤汉")
+      content.gsub!("物约政变", "雾月政变")
+      content.gsub!("孟德威尔", "曼德维尔")
+      content.gsub!("思考快语曼", "思考快与慢")
+      content.gsub!("恒昌连接", "恒常连接")
+      content.gsub!(/青年大远必须死|答案必须死/, "青年大院必须死")
+
+      regex = /(语言植物|植物的逻辑|植物逻辑|植物关系|植物的意义|植物论|现实植物|植物概念|植物对象)/
+      content.gsub!(regex) do |match|
+        match.gsub("植物", "指物")
+      end
+      content.gsub!("语言的勿用", "语言的误用")
+      content.gsub!("语言勿用", "语言误用")
+      content.gsub!("巨生认知", "具身认知")
+      content.gsub!("凤毛领角", "凤毛麟角")
+
+      flip_item.update!(content: content)
+    end
+  end
+end
