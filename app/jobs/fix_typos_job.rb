@@ -8,7 +8,7 @@ class FixTyposJob < ApplicationJob
       content = flip_item.content
       content.gsub!(/我是李宗盛/, "我是李厚辰")
       content.gsub!(/.*(字幕志愿者|李宗盛|优优独播|独播剧场|YoYo|明镜与|明镜需|支持明镜|订阅 转发).*/, "")
-      content.gsub!(/李厚成|李厚臣|李侯诚|李侯臣|李厚诚|刘成|厉后尘/, "李厚辰")
+      content.gsub!(/李厚成|李厚臣|李侯诚|李侯臣|李厚诚|刘成|厉后尘|李侯辰/, "李厚辰")
       content.gsub!("翻店", "翻电")
       content.gsub!(/飞软电台|发展电台|菲尔电台/, "翻转电台")
       content.gsub!("饭店问答", "翻电问答")
