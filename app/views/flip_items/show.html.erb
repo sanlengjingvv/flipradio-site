@@ -1,2 +1,7 @@
 <h1 class="text-3xl font-bold mb-4"><%= link_to @flip_item.title, @flip_item.link, target: "_blank" %></h1>
+<%= button_to "LLM 校对", check_flip_item_typos_path(@flip_item, format: :turbo_stream), 
+              method: :get, 
+              data: { turbo: true }, 
+              class: "bg-gray-100 px-4 py-2 rounded hover:bg-gray-200" %>
+<div id="typos-response" class="mt-4"></div>
 <%= simple_format @flip_item.content %>

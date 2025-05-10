@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get "flip_items/:id", to: "flip_items#show", as: :flip_item
   get "flip_items", to: "flip_items#index", as: :flip_items
   get "flip_items/:id/edit", to: "flip_items#edit", as: :edit_flip_item
+  get "flip_items/:id/check_for_typos", to: "flip_items#check_for_typos", as: :check_flip_item_typos
   patch "flip_items/:id", to: "flip_items#update"
   post "flip_items", to: "flip_items#create"
   # resources :flip_items
