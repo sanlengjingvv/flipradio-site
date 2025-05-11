@@ -72,3 +72,5 @@ gem "pagy", "~> 9.3"
 gem "rest-client", "~> 2.1"
 
 gem "ruby_llm", "~> 1.2"
+
+gem "neighbor", "~> 0.5.2"

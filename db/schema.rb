@@ -10,9 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_06_002711) do
-  create_schema "monitor"
-  create_schema "repack"
+ActiveRecord::Schema[8.0].define(version: 2025_05_11_122040) do
+  create_schema "monitor", if_not_exists: true
+  create_schema "paradedb", if_not_exists: true
+  create_schema "repack", if_not_exists: true
+  create_schema "zhparser", if_not_exists: true
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -27,10 +29,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_06_002711) do
   enable_extension "monitor.pg_stat_statements"
   enable_extension "monitor.pg_visibility"
   enable_extension "monitor.pgstattuple"
+  enable_extension "paradedb.pg_search"
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_repack"
   enable_extension "pg_trgm"
   enable_extension "postgres_fdw"
+  enable_extension "vector"
+  enable_extension "zhparser"
 
   create_table "flip_items", force: :cascade do |t|
     t.string "title"
@@ -41,6 +46,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_06_002711) do
     t.date "release_date"
     t.string "transcript_source"
     t.string "audiovisual_url"
+    t.text "zhparser_token", default: [], array: true
+    t.vector "embedding", limit: 768
     t.index ["link"], name: "index_flip_items_on_link", unique: true
   end
 

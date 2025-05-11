@@ -1,7 +1,8 @@
 <div id="search" class="mb-6 text-center text-xl">
   <%= form_with url: flip_items_path, method: :get do |form| %>
     <%= form.text_field :query, value: params[:query], class: "p-2 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500" %>
-    <%= form.submit "Search", class: "bg-gray-100 px-4 py-2 rounded  hover:bg-gray-200" %>
+    <%= form.submit "Keyword Search", class: "bg-gray-100 px-4 py-2 rounded  hover:bg-gray-200" %>
+    <%= form.submit "Full Text Search", class: "bg-gray-100 px-4 py-2 rounded  hover:bg-gray-200" %>
   <% end %>
 </div>
 

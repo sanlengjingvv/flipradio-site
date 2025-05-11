@@ -28,3 +28,13 @@ Things you may want to cover:
 A workaround for crash on MacOS
 >objc[81924]: +[__NSPlaceholderDictionary initialize] may have been in progress in another thread when fork() was called.
 objc[81924]: +[__NSPlaceholderDictionary initialize] may have been in progress in another thread when fork() was called. We cannot safely call it or ignore it in the fork() child process. Crashing instead. Set a breakpoint on objc_initializeAfterForkError to debug.
+
+```bash
+# Install postgresql extentsions
+pig repo add all -ru
+pig ext add pg_search
+pig ext add zhparser
+pig ext add vchord_bm25
+pig ext add pgvector
+pig ext add vchord
+```

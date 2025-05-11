@@ -6,7 +6,7 @@ class FlipItemsController < ApplicationController
     if params[:title].present?
       @flip_items = FlipItem.where(title: params[:title])
     else
-      @pagy, @flip_items = pagy(params[:query].present? ? FlipItem.recent.search(params[:query]) : FlipItem.recent.all)
+      @pagy, @flip_items = pagy(params[:query].present? ? FlipItem.search(params) : FlipItem.recent.all)
     end
   end
 
@@ -103,6 +103,7 @@ class FlipItemsController < ApplicationController
       # gemini-2.0-flash
       # gemini-2.5-pro-exp-03-25
       # gemini-2.0-flash-thinking-exp
+      # gemini-embedding-exp-03-07
       chat = RubyLLM.chat(model: "gemini-2.0-flash")
       Rails.logger.debug chat.model
       response = chat.ask prompt
