@@ -2,7 +2,7 @@ class FixTyposJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
-    flip_items = FlipItem.where "link LIKE ? OR link LIKE ?", "https://open.spotify.com/%", "https://www.xiaoyuzhoufm.com/%"
+    flip_items = FlipItem.where "link LIKE ? OR link LIKE ? OR link LIKE ?", "https://open.spotify.com/%", "https://www.xiaoyuzhoufm.com/%", "https://www.youtube.com/%"
     flip_items.each do |flip_item|
       title = flip_item.title
       content = flip_item.content
