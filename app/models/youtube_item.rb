@@ -1,0 +1,2 @@
+class YoutubeItem < ApplicationRecord
+end

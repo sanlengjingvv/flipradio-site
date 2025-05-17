@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  webpage_url: MyString
+  subtitle_url: MyString
+  upload_date: 2025-05-15
+  playlist: MyString
+
+two:
+  title: MyString
+  webpage_url: MyString
+  subtitle_url: MyString
+  upload_date: 2025-05-15
+  playlist: MyString

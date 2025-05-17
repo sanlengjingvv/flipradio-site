@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_11_122040) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_15_141409) do
   create_schema "monitor", if_not_exists: true
   create_schema "paradedb", if_not_exists: true
   create_schema "repack", if_not_exists: true
@@ -48,6 +48,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_122040) do
     t.string "audiovisual_url"
     t.text "zhparser_token", default: [], array: true
     t.vector "embedding", limit: 768
+    t.index ["id", "title", "zhparser_token"], name: "search_idx", using: :bm25
     t.index ["link"], name: "index_flip_items_on_link", unique: true
   end
 
@@ -96,6 +97,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_122040) do
     t.string "enclosure_url"
     t.datetime "pub_date"
     t.string "link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "youtube_items", force: :cascade do |t|
+    t.string "title"
+    t.string "webpage_url"
+    t.text "subtitle"
+    t.date "upload_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

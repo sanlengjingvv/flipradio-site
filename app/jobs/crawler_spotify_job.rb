@@ -52,7 +52,7 @@ class CrawlerSpotifyJob < ApplicationJob
       title = spotify_item.name
       next if [ "1/2", "2/2", "1/3", "2/3", "3/3", "1/4", "2/4", "3/4", "4/4", "1/5", "2/5", "3/5", "4/5", "5/5", "YT直播", "透明茶室", "世界苦茶" ].any? { |substring| title.include?(substring) }
       next if FlipItem.find_by title: title
-      FlipItem.create!(title: spotify_item.name, link: spotify_item.link, content: spotify_item.transcript, release_date: spotify_item.release_date)
+      FlipItem.create!(title: title, link: spotify_item.link, content: spotify_item.transcript, release_date: spotify_item.release_date)
     end
   end
 end
