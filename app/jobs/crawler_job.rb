@@ -28,41 +28,6 @@ class CrawlerJob < ApplicationJob
     end
   end
 
-  def crawler_youtube
-    Rails.logger.info "Youtube CrawlerJob Started"
-    last_youtube = FlipItem.where("link LIKE ?", "https://www.youtube.com/%").order(release_date: :desc, created_at: :desc).limit(1).first
-    dateafter = last_youtube ? last_youtube.release_date.to_s.gsub("-", "") : "20231110"
-    yt_dlp_path = Rails.root.join("exec", "yt-dlp").to_s
-    cookies_path = Rails.root.join("exec", "cookies.txt").to_s
-    cookies = File.exist?(cookies_path) ? "--cookies #{cookies_path}": ""
-    command = "#{yt_dlp_path} #{cookies} --dateafter #{dateafter} --dump-json https://www.youtube.com/@flipradio_fearnation/videos"
-    IO.popen(command) do |io|
-      while line = io.gets
-        info = JSON.parse(line.chomp)
-        webpage_url = info["webpage_url"]
-        title = info["title"]
-        Rails.logger.info "Youtube-dl: #{title} #{webpage_url}"
-        next if [ "PLxfcznuBUN2Dr6EqSxDSlrt7DjpznRbZk", "PLxfcznuBUN2AaOeUu1q03ccPf6XSJx8Ee", "PLxfcznuBUN2AC9eTTB3dbhEjMIih-UcAQ" ].include?(info["playlist_id"])
-        next if FlipItem.find_by title: title
-        upload_date = info["upload_date"]
-        subtitle = ""
-        if info["subtitles"] && info["subtitles"]["zh"]
-          info["subtitles"]["zh"].each do |subtitle_zh|
-            if subtitle_zh["ext"] == "vtt"
-              subtitle_response = RestClient.send("get", subtitle_zh["url"])
-              subtitle = subtitle_response.body
-              subtitle.gsub!(/WEBVTT\nKind: captions\nLanguage: zh/, "")
-              subtitle.gsub!(/^\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}/, "")
-              subtitle = subtitle.split("\n").reject(&:empty?).join("\n")
-            end
-          end
-        end
-        FlipItem.upsert({ title: title, link: webpage_url, content: subtitle, release_date: upload_date }, unique_by: :link)
-        Rails.logger.info "Youtube: #{title} #{webpage_url} saved"
-      end
-    end
-  end
-
   def crawler_article
     Rails.logger.info "CrawlerJob Started crawler_article"
     catalog = Nokogiri::HTML(URI.open("https://www.flipradio.club/-3"))
