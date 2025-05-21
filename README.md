@@ -46,3 +46,11 @@ ALTER TEXT SEARCH CONFIGURATION testzhcfg ADD MAPPING FOR n,v,a,i,e,l WITH simpl
 update flip_items set zhparser_token = (SELECT ARRAY_AGG(token) FROM ts_parse('zhparser', content));
 CREATE INDEX search_idx ON flip_items USING bm25 (id, title, zhparser_token) WITH (key_field='id');
 ```
+
+todo
+tailwindcss layout
+ruby_llm avtivetive chat
+pg_search jieba
+vectorchord 
+meilisearch
+kamal
