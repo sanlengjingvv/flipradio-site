@@ -104,8 +104,8 @@ class FlipItemsController < ApplicationController
       # gemini-2.5-pro-exp-03-25
       # gemini-2.0-flash-thinking-exp
       # gemini-embedding-exp-03-07
-      chat = RubyLLM.chat(model: "gemini-2.0-flash")
-      Rails.logger.debug chat.model
+      chat = Chat.create!(model_id: "gemini-2.0-flash")
+      Rails.logger.debug chat.model_id
       response = chat.ask prompt
       @content = response.content
       Rails.logger.debug "Gemini response: #{response.content}"

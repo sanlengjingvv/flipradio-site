@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_15_141409) do
-  create_schema "monitor", if_not_exists: true
-  create_schema "paradedb", if_not_exists: true
-  create_schema "repack", if_not_exists: true
-  create_schema "zhparser", if_not_exists: true
+ActiveRecord::Schema[8.0].define(version: 2025_05_21_122650) do
+  create_schema "monitor"
+  create_schema "paradedb"
+  create_schema "repack"
+  create_schema "zhparser"
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -37,6 +37,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_141409) do
   enable_extension "vector"
   enable_extension "zhparser"
 
+  create_table "chats", force: :cascade do |t|
+    t.string "model_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "flip_items", force: :cascade do |t|
     t.string "title"
     t.string "link"
@@ -50,6 +56,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_141409) do
     t.vector "embedding", limit: 768
     t.index ["id", "title", "zhparser_token"], name: "search_idx", using: :bm25
     t.index ["link"], name: "index_flip_items_on_link", unique: true
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "chat_id", null: false
+    t.string "role"
+    t.text "content"
+    t.string "model_id"
+    t.integer "input_tokens"
+    t.integer "output_tokens"
+    t.bigint "tool_call_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
+    t.index ["tool_call_id"], name: "index_messages_on_tool_call_id"
   end
 
   create_table "podchaser_items", force: :cascade do |t|
@@ -84,6 +104,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_141409) do
     t.index ["link"], name: "index_spotify_items_on_link", unique: true
   end
 
+  create_table "tool_calls", force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.string "tool_call_id", null: false
+    t.string "name", null: false
+    t.jsonb "arguments", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_id"], name: "index_tool_calls_on_message_id"
+    t.index ["tool_call_id"], name: "index_tool_calls_on_tool_call_id", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email_address", null: false
     t.string "password_digest", null: false
@@ -110,5 +141,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_141409) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "messages", "chats"
   add_foreign_key "sessions", "users"
+  add_foreign_key "tool_calls", "messages"
 end
