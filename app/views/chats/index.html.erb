@@ -1,0 +1,7 @@
+<div id="chats">
+    <% @chats.each do |chat| %>
+        <h2 class="text-3xl font-bold mb-4"><%= link_to chat.id, chat %></h2>
+    <% end %>
+</div>
+
+<%== pagy_nav(@pagy) %>

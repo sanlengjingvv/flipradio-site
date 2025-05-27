@@ -1,0 +1,8 @@
+  <div class="message <%= message.role %>">
+    <strong><%= message.role.capitalize %>:</strong>
+    <%# Target div for streaming content %>
+    <div id="<%= dom_id(message, "content") %>" style="display: inline;">
+      <%# Render initial content if not streaming, otherwise job appends here %>
+      <%= message.content.present? ? simple_format(message.content) : '<span class="thinking">...</span>'.html_safe %>
+    </div>
+  </div>

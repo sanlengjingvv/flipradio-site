@@ -1,0 +1,11 @@
+<h1>Chat <%= @chat.id %></h1>
+<div id="messages">
+  <%= render @chat.messages %>
+</div>
+<!-- Your form to submit new messages -->
+<%= form_with(url: chat_messages_path(@chat), method: :post) do |f| %>
+  <%= f.text_area :content %>
+  <%= f.submit "Send" %>
+<% end %>
+
+<% console %>

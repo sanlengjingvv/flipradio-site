@@ -17,6 +17,10 @@ Rails.application.routes.draw do
   get "flip_items/:id/check_for_typos", to: "flip_items#check_for_typos", as: :check_flip_item_typos
   patch "flip_items/:id", to: "flip_items#update"
   post "flip_items", to: "flip_items#create"
+
+  get "chats", to: "chats#index"
+  get "chats/:id", to: "chats#show", as: :chat
+  post "chats/:chat_id/messages", to: "messages#create", as: :chat_messages
   # resources :flip_items
   # Defines the root path route ("/")
   root "flip_items#index"
