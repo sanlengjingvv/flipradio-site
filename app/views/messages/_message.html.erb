@@ -1,3 +1,4 @@
+<%= turbo_frame_tag message do %>
   <div class="message <%= message.role %>">
     <strong><%= message.role.capitalize %>:</strong>
     <%# Target div for streaming content %>
@@ -6,3 +7,4 @@
       <%= message.content.present? ? simple_format(message.content) : '<span class="thinking">...</span>'.html_safe %>
     </div>
   </div>
+<% end %>

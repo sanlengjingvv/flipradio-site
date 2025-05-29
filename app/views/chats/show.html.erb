@@ -1,3 +1,4 @@
+<%= turbo_stream_from [@chat, "messages"] %>
 <h1>Chat <%= @chat.id %></h1>
 <div id="messages">
   <%= render @chat.messages %>
@@ -7,5 +8,3 @@
   <%= f.text_area :content %>
   <%= f.submit "Send" %>
 <% end %>
-
-<% console %>

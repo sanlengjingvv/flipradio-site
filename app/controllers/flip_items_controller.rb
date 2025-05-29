@@ -100,10 +100,7 @@ class FlipItemsController < ApplicationController
       Remember to base your analysis solely on the provided transcription and your knowledge of Philosophy, Politics, and Economics. Do not make assumptions about the audio content beyond what is presented in the transcription.
       prompt
 
-      # gemini-2.0-flash
-      # gemini-2.5-pro-exp-03-25
-      # gemini-2.0-flash-thinking-exp
-      # gemini-embedding-exp-03-07
+      # RubyLLM.models.by_provider(:gemini).map(&:id)
       chat = Chat.create!(model_id: "gemini-2.0-flash")
       Rails.logger.debug chat.model_id
       response = chat.ask prompt

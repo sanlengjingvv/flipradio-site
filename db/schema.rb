@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_21_122650) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_29_005656) do
   create_schema "monitor"
   create_schema "paradedb"
   create_schema "repack"
