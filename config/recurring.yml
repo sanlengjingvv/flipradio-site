@@ -9,9 +9,24 @@
 #     priority: 2
 #     schedule: at 5am every day
 
-development:
-  periodic_command:
+production:
+  periodic_crawler_spotify:
+    class: CrawlerSpotifyJob
+    args: []
+    priority: 0
+    schedule: every day at 9am
+  periodic_crawler_youtube:
+    class: CrawlerYoutubeJob
+    args: []
+    priority: 0
+    schedule: every day at 10am
+  periodic_crawler:
     class: CrawlerJob
     args: []
     priority: 0
-    schedule: "0 12 * * 1-5"
+    schedule: every day at 11am
+  periodic_add_punctuation:
+    class: AddPunctuationJob
+    args: []
+    priority: 0
+    schedule: every hour
