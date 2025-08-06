@@ -33,18 +33,12 @@ objc[81924]: +[__NSPlaceholderDictionary initialize] may have been in progress i
 # Install postgresql extentsions
 pig repo add all -ru
 pig ext add pg_search
-pig ext add zhparser
 pig ext add vchord_bm25
 pig ext add pgvector
 pig ext add vchord
 
 \c flipradio_production
 CREATE EXTENSION pg_search;
-CREATE EXTENSION zhparser;
-CREATE TEXT SEARCH CONFIGURATION testzhcfg (PARSER = zhparser);
-ALTER TEXT SEARCH CONFIGURATION testzhcfg ADD MAPPING FOR n,v,a,i,e,l WITH simple;
-update flip_items set zhparser_token = (SELECT ARRAY_AGG(token) FROM ts_parse('zhparser', content));
-CREATE INDEX search_idx ON flip_items USING bm25 (id, title, zhparser_token) WITH (key_field='id');
 ```
 
 todo

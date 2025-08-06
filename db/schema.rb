@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_29_005656) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_06_163013) do
   create_schema "monitor"
   create_schema "paradedb"
   create_schema "repack"
-  create_schema "zhparser"
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -35,7 +34,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_29_005656) do
   enable_extension "pg_trgm"
   enable_extension "postgres_fdw"
   enable_extension "vector"
-  enable_extension "zhparser"
 
   create_table "chats", force: :cascade do |t|
     t.string "model_id"
@@ -52,9 +50,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_29_005656) do
     t.date "release_date"
     t.string "transcript_source"
     t.string "audiovisual_url"
-    t.text "zhparser_token", default: [], array: true
     t.vector "embedding", limit: 768
-    t.index ["id", "title", "zhparser_token"], name: "search_idx", using: :bm25
+    t.index ["id", "title", "content"], name: "search_idx", using: :bm25
     t.index ["link"], name: "index_flip_items_on_link", unique: true
   end
 

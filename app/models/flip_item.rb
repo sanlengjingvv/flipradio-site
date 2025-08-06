@@ -9,7 +9,7 @@ class FlipItem < ApplicationRecord
     if params[:commit] == "Keyword Search"
       where("title like ? OR content like ?", "%#{params[:query]}%", "%#{params[:query]}%")
     elsif params[:commit] == "Full Text Search"
-      where("title @@@ ? OR zhparser_token @@@ ?", "#{params[:query]}", "#{params[:query]}").order(Arel.sql("paradedb.score(id) DESC, title, zhparser_token"))
+      where("title @@@ ? OR content @@@ ?", "#{params[:query]}", "#{params[:query]}").order(Arel.sql("paradedb.score(id) DESC"))
     end
   end
 
