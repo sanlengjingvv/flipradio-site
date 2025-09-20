@@ -20,9 +20,9 @@ class CrawlerSpotifyJob < ApplicationJob
       episodes_response = RestClient.send "get", episodes["next"], { Authorization: "Bearer #{client_token}" }
       episodes = JSON.parse(episodes_response.body)
 
-      flip_item = FlipItem.where("link LIKE ?", "https://open.spotify.com/episode/%").order(release_date: :desc, created_at: :desc).limit(1).first
+      flip_item = SpotifyItem.where("link LIKE ?", "https://open.spotify.com/episode/%").order(release_date: :desc, created_at: :desc).limit(1).first
       episodes["items"].each do |episode|
-        Rails.logger.debug "Spotify episode name is #{episode["name"]}, external_urls is #{episode["external_urls"]["spotify"]}"
+        Rails.logger.info "Spotify episode name is #{episode["name"]}, external_urls is #{episode["external_urls"]["spotify"]}"
         return if flip_item && flip_item.link == episode["external_urls"]["spotify"]
         Rails.logger.info "Spotify episode name is #{episode["name"]}, external_urls is #{episode["external_urls"]["spotify"]}"
         transcript_text = ""
